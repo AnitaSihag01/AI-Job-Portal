@@ -18,13 +18,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-   public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request){
-
-      RegisterResponse response = authService.register(request);
-         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto login){
         LoginResponseDto response = authService.login(login);

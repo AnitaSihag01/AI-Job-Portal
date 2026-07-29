@@ -24,7 +24,7 @@ public class AuthService {
 
     private  final PasswordEncoder passwordEncoder;
 
-    public RegisterResponse register (RegisterRequest request){
+   /* public RegisterResponse register (RegisterRequest request){
 
         // CONVERT RegisterREquest -> user Entity
         User user = User.builder()
@@ -49,7 +49,7 @@ public class AuthService {
 
         // return response
         return response;
-    }
+    }*/
 
     public LoginResponseDto login(LoginRequestDto request){
         User user = userRepository.findByEmail(request.getEmail());
@@ -75,4 +75,32 @@ public class AuthService {
 
     }
 
+    public RegisterResponse register(RegisterRequest request) {
+        return registerUser(request, Role.CANDIDATE);
+    }
+
+
+    private RegisterResponse registerUser(RegisterRequest request, Role role) {
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(role)
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+        return RegisterResponse.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .createdAt(savedUser.getCreatedAt())
+                .build();
+    }
+
+    public RegisterResponse registerRecruiter(RegisterRequest request) {
+        return registerUser(request, Role.RECRUITER);
+    }
 }
