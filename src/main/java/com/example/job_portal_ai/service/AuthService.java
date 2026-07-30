@@ -7,6 +7,7 @@ import com.example.job_portal_ai.dto.RegisterRequest;
 import com.example.job_portal_ai.dto.RegisterResponse;
 import com.example.job_portal_ai.entity.User;
 import com.example.job_portal_ai.entity.type.Role;
+import com.example.job_portal_ai.exception.EmailAlreadyExistsException;
 import com.example.job_portal_ai.exception.InvalidCredentialsException;
 import com.example.job_portal_ai.exception.UserNotFoundException;
 import com.example.job_portal_ai.repository.UserRepository;
@@ -82,6 +83,12 @@ public class AuthService {
 
     private RegisterResponse registerUser(RegisterRequest request, Role role) {
 
+        User existingUser = userRepository.findByEmail(request.getEmail());
+
+        if (existingUser != null) {
+            throw new EmailAlreadyExistsException("Email already exist");
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -101,6 +108,7 @@ public class AuthService {
     }
 
     public RegisterResponse registerRecruiter(RegisterRequest request) {
+
         return registerUser(request, Role.RECRUITER);
     }
 }
