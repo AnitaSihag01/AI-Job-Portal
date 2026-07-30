@@ -9,6 +9,7 @@ import com.example.job_portal_ai.exception.UserNotFoundException;
 import com.example.job_portal_ai.repository.RecruiterProfileRepository;
 import com.example.job_portal_ai.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,13 +22,22 @@ public class RecruiterProfileService {
 
     public RecruiterProfile createProfile(RecruiterProfileRequest request) {
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() ->
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        System.out.println("EMAIL FROM JWT: " + email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow( () ->
                         new UserNotFoundException("User not found"));
 
 
         if(user.getRole() != Role.RECRUITER){
-            throw new UserIsNotRecruiterException("User is not a recruiter");
+            throw new UserIsNotRecruiterException(
+                    "User is not a recruiter"
+            );
         }
 
 

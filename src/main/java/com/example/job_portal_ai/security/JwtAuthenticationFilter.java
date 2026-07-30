@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.util.List;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -40,21 +39,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         System.out.println("TOKEN RECEIVED: " + token);
-
         try {
 
             String email = jwtSecurity.extractUsername(token);
 
-            User user = userRepository.findByEmail(email);
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() ->
+                            new JwtAuthenticationException("User not found"));
 
-            if(user != null && jwtSecurity.isTokenValid(token, user)) {
+
+            if(jwtSecurity.isTokenValid(token, user)) {
 
                 List<GrantedAuthority> authorities =
                         List.of(new SimpleGrantedAuthority(
                                 "ROLE_" + user.getRole()
                         ));
+
                 System.out.println("ROLE FROM DB: " + user.getRole());
                 System.out.println("AUTHORITIES: " + authorities);
+
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
@@ -62,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 null,
                                 authorities
                         );
+
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);

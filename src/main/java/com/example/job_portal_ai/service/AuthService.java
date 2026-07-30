@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -53,17 +55,22 @@ public class AuthService {
     }*/
 
     public LoginResponseDto login(LoginRequestDto request){
-        User user = userRepository.findByEmail(request.getEmail());
-        if(user == null){
-            throw new UserNotFoundException("User not found");
-        }
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found"));
+
+
         if(!passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()
         )){
             throw new InvalidCredentialsException("Invalid email or password");
         }
+
+
         String token = jwtSecurity.generateToken(user);
+
 
         LoginResponseDto response = LoginResponseDto.builder()
                 .id(user.getId())
@@ -72,22 +79,26 @@ public class AuthService {
                 .role(user.getRole())
                 .token(token)
                 .build();
-        return  response;
 
+
+        return response;
     }
 
     public RegisterResponse register(RegisterRequest request) {
+
         return registerUser(request, Role.CANDIDATE);
     }
 
 
     private RegisterResponse registerUser(RegisterRequest request, Role role) {
 
-        User existingUser = userRepository.findByEmail(request.getEmail());
+        Optional<User> existingUser =
+                userRepository.findByEmail(request.getEmail());
 
-        if (existingUser != null) {
+        if (existingUser.isPresent()) {
             throw new EmailAlreadyExistsException("Email already exist");
         }
+
 
         User user = User.builder()
                 .name(request.getName())
@@ -96,7 +107,9 @@ public class AuthService {
                 .role(role)
                 .build();
 
+
         User savedUser = userRepository.save(user);
+
 
         return RegisterResponse.builder()
                 .id(savedUser.getId())
@@ -106,7 +119,6 @@ public class AuthService {
                 .createdAt(savedUser.getCreatedAt())
                 .build();
     }
-
     public RegisterResponse registerRecruiter(RegisterRequest request) {
 
         return registerUser(request, Role.RECRUITER);

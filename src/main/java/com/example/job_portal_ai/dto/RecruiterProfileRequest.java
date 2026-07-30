@@ -9,5 +9,4 @@ public class RecruiterProfileRequest {
     private String companyDescription;
     private String website;
     private String location;
-    private Long userId;
 }
