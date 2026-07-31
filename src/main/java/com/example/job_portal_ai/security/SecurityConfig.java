@@ -39,6 +39,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**", "/api/recruiter/register"
                         ).permitAll()
+                        .requestMatchers("/api/recruiter/**")
+                        .hasRole("RECRUITER")
+
                         .anyRequest().authenticated()
                 )
 
