@@ -21,21 +21,25 @@ public class CandidateProfileService {
     private final FileStorageService fileStorageService;
 
 
-    public CandidateProfileResponseDto createProfile(
-            CandidateProfileRequestDto request
-    ) {
+    private User getCurrentUser() {
 
         String email = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getName();
 
-
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found")
                 );
+    }
 
+
+    public CandidateProfileResponseDto createProfile(
+            CandidateProfileRequestDto request
+    ) {
+
+        User user = getCurrentUser();
 
         CandidateProfile profile =
                 candidateProfileRepository.findByUser(user)
@@ -84,16 +88,7 @@ public class CandidateProfileService {
 
     public CandidateProfileResponseDto getProfile(){
 
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found")
-                );
+        User user = getCurrentUser();
 
 
         CandidateProfile profile =
@@ -122,16 +117,7 @@ public class CandidateProfileService {
             CandidateProfileRequestDto request
     ) {
 
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found")
-                );
+        User user = getCurrentUser();
 
 
         CandidateProfile profile =
@@ -170,16 +156,7 @@ public class CandidateProfileService {
     }
     public void deleteProfile(){
 
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found")
-                );
+        User user = getCurrentUser();
 
 
         CandidateProfile profile =
@@ -197,16 +174,7 @@ public class CandidateProfileService {
             MultipartFile file
     ) {
 
-        String email = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found")
-                );
+        User user = getCurrentUser();
 
 
         CandidateProfile profile =
@@ -240,5 +208,18 @@ public class CandidateProfileService {
                 .linkedinUrl(savedProfile.getLinkedinUrl())
                 .resumeUrl(savedProfile.getResumeUrl())
                 .build();
+    }
+
+    public String getResumeFileName() {
+
+        User user = getCurrentUser();
+
+        CandidateProfile profile = candidateProfileRepository
+                .findByUser(user)
+                .orElseThrow(() ->
+                        new RuntimeException("Profile not found")
+                );
+
+        return profile.getResumeUrl();
     }
 }

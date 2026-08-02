@@ -1,12 +1,15 @@
 package com.example.job_portal_ai.service;
 
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.*;
-
 @Service
 public class FileStorageService {
 
@@ -55,5 +58,25 @@ public class FileStorageService {
         //Reads uploads/ location.
         //Creates the folder if missing.
         //Generates a unique file name:
+    }
+
+    public Resource loadFile(String fileName) {
+
+        try {
+
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return resource;
+            }
+
+            throw new RuntimeException("File not found");
+
+        } catch (MalformedURLException e) {
+
+            throw new RuntimeException("File not found", e);
+        }
     }
 }
