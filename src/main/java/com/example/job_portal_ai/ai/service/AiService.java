@@ -1,4 +1,4 @@
-package com.example.job_portal_ai.ai;
+package com.example.job_portal_ai.ai.service;
 
 public interface AiService {
 

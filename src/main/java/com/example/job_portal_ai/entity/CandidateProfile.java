@@ -3,6 +3,8 @@ package com.example.job_portal_ai.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -35,4 +37,9 @@ public class CandidateProfile {
     private String linkedinUrl;
 
     private String resumeUrl;
+
+    private boolean resumeUploaded;
+
+    private LocalDateTime uploadedAt;
+
 }

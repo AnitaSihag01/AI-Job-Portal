@@ -37,11 +37,18 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/**", "/api/recruiter/register",
-                                "/api/ai/test","/api/resume","/api/resume/upload"
+                                "/api/auth/**",
+                                "/api/recruiter/register",
+                                "/api/candidate/register",
+                                "/api/ai/test",
+                                "/api/candidate/dashboard"
                         ).permitAll()
+
                         .requestMatchers("/api/recruiter/**")
                         .hasRole("RECRUITER")
+
+                        .requestMatchers("/api/resume/**")
+                        .hasRole("CANDIDATE")
 
                         .anyRequest().authenticated()
                 )

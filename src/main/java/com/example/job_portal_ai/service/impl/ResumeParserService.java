@@ -1,4 +1,4 @@
-package com.example.job_portal_ai.impl;
+package com.example.job_portal_ai.service.impl;
 
 import org.springframework.web.multipart.MultipartFile;
 

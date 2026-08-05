@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class CandidateProfileController {
     private final CandidateProfileService candidateProfileService;
     private final FileStorageService fileStorageService;
 
+    @PreAuthorize("hasRole('CANDIDATE')")
     @PostMapping
     public ResponseEntity<CandidateProfileResponseDto> createProfile(
             @RequestBody CandidateProfileRequestDto request
@@ -31,7 +33,7 @@ public class CandidateProfileController {
         );
     }
 
-
+    @PreAuthorize("hasRole('CANDIDATE')")
     @GetMapping
     public ResponseEntity<CandidateProfileResponseDto> getProfile(){
 
@@ -41,6 +43,7 @@ public class CandidateProfileController {
     }
 
 
+    @PreAuthorize("hasRole('CANDIDATE')")
     @PutMapping
     public ResponseEntity<CandidateProfileResponseDto> updateProfile(
             @RequestBody CandidateProfileRequestDto request
@@ -52,6 +55,7 @@ public class CandidateProfileController {
     }
 
 
+    @PreAuthorize("hasRole('CANDIDATE')")
     @DeleteMapping
     public ResponseEntity<String> deleteProfile(){
 
@@ -62,6 +66,7 @@ public class CandidateProfileController {
         );
     }
 
+    @PreAuthorize("hasRole('CANDIDATE')")
     @PostMapping("/resume")
     public ResponseEntity<CandidateProfileResponseDto> uploadResume(
             @RequestParam("file") MultipartFile file
@@ -72,6 +77,7 @@ public class CandidateProfileController {
         );
     }
 
+    @PreAuthorize("hasRole('CANDIDATE')")
     @GetMapping("/resume")
     public ResponseEntity<Resource> downloadResume() {
 

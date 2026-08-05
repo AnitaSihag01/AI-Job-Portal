@@ -3,6 +3,8 @@ package com.example.job_portal_ai.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class CandidateProfileResponseDto {
@@ -28,4 +30,8 @@ public class CandidateProfileResponseDto {
     private String linkedinUrl;
 
     private String resumeUrl;
+
+    private boolean resumeUploaded;
+
+    private LocalDateTime uploadedAt;
 }

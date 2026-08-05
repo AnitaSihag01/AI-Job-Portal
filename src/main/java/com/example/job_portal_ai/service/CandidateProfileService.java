@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class CandidateProfileService {
@@ -58,7 +60,6 @@ public class CandidateProfileService {
         profile.setGithubUrl(request.getGithubUrl());
         profile.setLinkedinUrl(request.getLinkedinUrl());
 
-
         CandidateProfile savedProfile =
                 candidateProfileRepository.save(profile);
 
@@ -75,6 +76,8 @@ public class CandidateProfileService {
                 .githubUrl(savedProfile.getGithubUrl())
                 .linkedinUrl(savedProfile.getLinkedinUrl())
                 .resumeUrl(savedProfile.getResumeUrl())
+                .resumeUploaded(savedProfile.isResumeUploaded())
+                .uploadedAt(savedProfile.getUploadedAt())
                 .build();
 
         // Logic:
@@ -110,6 +113,8 @@ public class CandidateProfileService {
                 .githubUrl(profile.getGithubUrl())
                 .linkedinUrl(profile.getLinkedinUrl())
                 .resumeUrl(profile.getResumeUrl())
+                .resumeUploaded(profile.isResumeUploaded())
+                .uploadedAt(profile.getUploadedAt())
                 .build();
     }
 
@@ -152,6 +157,8 @@ public class CandidateProfileService {
                 .githubUrl(updatedProfile.getGithubUrl())
                 .linkedinUrl(updatedProfile.getLinkedinUrl())
                 .resumeUrl(updatedProfile.getResumeUrl())
+                .resumeUploaded(updatedProfile.isResumeUploaded())
+                .uploadedAt(updatedProfile.getUploadedAt())
                 .build();
     }
     public void deleteProfile(){
@@ -189,6 +196,8 @@ public class CandidateProfileService {
 
 
         profile.setResumeUrl(fileName);
+        profile.setResumeUploaded(true);
+        profile.setUploadedAt(LocalDateTime.now());
 
 
         CandidateProfile savedProfile =
@@ -207,6 +216,8 @@ public class CandidateProfileService {
                 .githubUrl(savedProfile.getGithubUrl())
                 .linkedinUrl(savedProfile.getLinkedinUrl())
                 .resumeUrl(savedProfile.getResumeUrl())
+                .resumeUploaded(savedProfile.isResumeUploaded())
+                .uploadedAt(savedProfile.getUploadedAt())
                 .build();
     }
 

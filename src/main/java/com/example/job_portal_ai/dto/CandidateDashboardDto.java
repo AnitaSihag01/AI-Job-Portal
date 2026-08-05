@@ -6,22 +6,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class ResumeAnalysisDto {
+public class CandidateDashboardDto {
 
-    private String candidateName;
+    private String name;
+
     private String email;
 
-    private String phone;
-    private String location;
-
-    private List<String> skills;
-    private List<String> education;
-    private List<String> projects;
-
-    private String experience;
-    private String githubUrl;
+    private boolean resumeUploaded;
 
     private LocalDateTime uploadedAt;
 
-    private String resumeUrl;
+    private List<String> skills;
+
+    private List<String> education;
+
+    private List<String> projects;
+
+    private String experience;
+
+    private String githubUrl;
 }

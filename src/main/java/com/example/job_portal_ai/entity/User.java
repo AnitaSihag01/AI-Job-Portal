@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +35,7 @@ public class User {
 
    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<ResumeAnalysis> resumeAnalyses;
 }
